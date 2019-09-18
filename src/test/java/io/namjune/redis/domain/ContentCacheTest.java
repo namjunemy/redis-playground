@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.redisson.api.RMap;
 import org.redisson.api.RedissonClient;
+import org.redisson.codec.JsonJacksonCodec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -42,7 +43,7 @@ public class ContentCacheTest {
         putTestData(size);
 
         //when
-        RMap<Long, List<Long>> map = this.redissonClient.getMap(TEST_KEY);
+        RMap<Long, List<Long>> map = this.redissonClient.getMap(TEST_KEY, new JsonJacksonCodec());
         ContentCache contentCache = ContentCache.builder()
             .contentsByCpIdxMap(map.readAllMap())
             .build();
