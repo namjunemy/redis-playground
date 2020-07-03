@@ -1,15 +1,16 @@
 package io.namjune.redis.domain;
 
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
@@ -20,7 +21,7 @@ import java.util.stream.LongStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class ContentCacheTest {
 
@@ -39,13 +40,14 @@ public class ContentCacheTest {
     @Resource(name = "redisTemplate")
     HashOperations<String, Long, List<Long>> hashOperations;
 
-    @After
+    @AfterEach
     public void tearDown() {
-        redisTemplate.delete(TEST_KEY_LIST);
         redisTemplate.delete(TEST_KEY_MAP);
+        redisTemplate.delete(TEST_KEY_LIST);
     }
 
     @Test
+    @DisplayName("Redis Hash 테스트")
     public void redis_hashes_test() {
         //given
         int size = 3;
@@ -54,8 +56,8 @@ public class ContentCacheTest {
         //when
         Map<Long, List<Long>> entries = hashOperations.entries(TEST_KEY_MAP);
         ContentHeadlineCache contentCache = ContentHeadlineCache.builder()
-            .contentsByCpIdxMap(entries)
-            .build();
+                                                                .contentsByCpIdxMap(entries)
+                                                                .build();
 
         boolean isExistKey = entries.keySet().iterator().hasNext();
 
@@ -68,6 +70,7 @@ public class ContentCacheTest {
     }
 
     @Test
+    @DisplayName("Redis List 테스트")
     public void redis_lists_test() {
         //given
         List<Long> origin = Arrays.asList(1L, 2L, 3L, 4L);
@@ -81,8 +84,8 @@ public class ContentCacheTest {
     private void putTestMapData(int size) {
         Map<Long, List<Long>> testMap = new HashMap<>();
         LongStream.rangeClosed(1L, size)
-            .forEach(l -> testMap
-                .put(l, Arrays.asList(l, 2L * l, 3L * l, 4L * l, 5L * l)));
+                  .forEach(l -> testMap
+                      .put(l, Arrays.asList(l, 2L * l, 3L * l, 4L * l, 5L * l)));
         hashOperations.putAll(TEST_KEY_MAP, testMap);
     }
 }
