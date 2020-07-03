@@ -21,7 +21,6 @@ repositories {
 dependencies {
   //embedded-redis
   compile group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
-  compile 'org.redisson:redisson:3.11.3'
   implementation 'org.springframework.boot:spring-boot-starter-data-redis'
   compileOnly 'org.projectlombok:lombok'
   runtimeOnly 'com.h2database:h2'

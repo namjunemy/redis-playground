@@ -23,8 +23,10 @@ public class EmbeddedRedisConfig {
 
     @PostConstruct
     public void redisServer() throws IOException {
-        redisServer = new RedisServer(redisPort);
-        redisServer.start();
+        if (redisServer == null || !redisServer.isActive()) {
+            redisServer = new RedisServer(redisPort);
+            redisServer.start();
+        }
     }
 
     @PreDestroy
