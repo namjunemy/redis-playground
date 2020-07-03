@@ -1,6 +1,6 @@
 # Redis Playground
 
-> redis java client - redisson 3.11.3  
+> spring-data-starter-redis lettuce 5.1.8
 
 - 레디스 자료구조 연습용 운동장
 - 빠른 로컬 테스트를 위해 embedded redis 활용
